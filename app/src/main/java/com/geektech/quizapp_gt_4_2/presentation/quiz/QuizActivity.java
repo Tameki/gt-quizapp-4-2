@@ -93,15 +93,6 @@ public class QuizActivity extends AppCompatActivity
 
     @Override
     public void onAnswerClick(int position, int selectedAnswerPosition) {
-        ArrayList<Integer> points = new ArrayList<>();
-
-        double distance = 0.0;
-
-        for (int i = 0; i < points.size(); i++) {
-            int point1 = points.get(i);
-            int point2 = points.get(i + 1);
-        }
-
         viewModel.onAnswerClick(position, selectedAnswerPosition);
     }
 }
