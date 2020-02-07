@@ -1,10 +1,11 @@
-package com.geektech.quizapp_gt_4_2.quiz.recycler;
+package com.geektech.quizapp_gt_4_2.presentation.quiz.recycler;
 
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.geektech.quizapp_gt_4_2.model.EType;
 import com.geektech.quizapp_gt_4_2.model.Question;
 
 public class QuizViewHolder extends RecyclerView.ViewHolder {
@@ -22,7 +23,7 @@ public class QuizViewHolder extends RecyclerView.ViewHolder {
     }
 
     void onBind(Question question) {
-        if (question.getType() == "multiple") {
+        if (question.getType() == EType.MULTIPLE) {
             //TODO: R.id.item_question_multiple = visible
         } else {
             //TODO: R.id.item_question_double = visible

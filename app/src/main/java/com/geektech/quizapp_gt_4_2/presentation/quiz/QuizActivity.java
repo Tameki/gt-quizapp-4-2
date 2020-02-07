@@ -1,25 +1,21 @@
-package com.geektech.quizapp_gt_4_2.quiz;
+package com.geektech.quizapp_gt_4_2.presentation.quiz;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.geektech.quizapp_gt_4_2.R;
-import com.geektech.quizapp_gt_4_2.model.Question;
-import com.geektech.quizapp_gt_4_2.quiz.recycler.QuizAdapter;
-import com.geektech.quizapp_gt_4_2.quiz.recycler.QuizViewHolder;
+import com.geektech.quizapp_gt_4_2.presentation.quiz.recycler.QuizAdapter;
+import com.geektech.quizapp_gt_4_2.presentation.quiz.recycler.QuizViewHolder;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class QuizActivity extends AppCompatActivity
         implements QuizViewHolder.Listener {
@@ -57,15 +53,7 @@ public class QuizActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        adapter = new QuizAdapter(this);
-        recyclerView = findViewById(R.id.quiz_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(
-                this,
-                RecyclerView.HORIZONTAL,
-                false
-        ));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setOnTouchListener((v, event) -> true);
+        initView();
 
         viewModel = ViewModelProviders.of(this)
                 .get(QuizViewModel.class);
@@ -80,11 +68,40 @@ public class QuizActivity extends AppCompatActivity
             recyclerView.smoothScrollToPosition(currentQuestion);
         });
 
+        viewModel.openResultEvent.observe(this, resultId -> {
+
+        });
+
         viewModel.init(10, 0, "");
+    }
+
+    private void initView() {
+        adapter = new QuizAdapter(this);
+        recyclerView = findViewById(R.id.quiz_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(
+                this,
+                RecyclerView.HORIZONTAL,
+                false
+        ));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setOnTouchListener((v, event) -> true);
+
+        findViewById(R.id.quiz_skip_question).setOnClickListener(v -> {
+            viewModel.onSkipClick();
+        });
     }
 
     @Override
     public void onAnswerClick(int position, int selectedAnswerPosition) {
+        ArrayList<Integer> points = new ArrayList<>();
+
+        double distance = 0.0;
+
+        for (int i = 0; i < points.size(); i++) {
+            int point1 = points.get(i);
+            int point2 = points.get(i + 1);
+        }
+
         viewModel.onAnswerClick(position, selectedAnswerPosition);
     }
 }

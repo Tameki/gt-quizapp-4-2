@@ -1,12 +1,13 @@
-package com.geektech.quizapp_gt_4_2.main;
+package com.geektech.quizapp_gt_4_2.presentation.main;
 
 import androidx.appcompat.widget.AppCompatSeekBar;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Log;
 import android.view.View;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 
 import com.geektech.quizapp_gt_4_2.R;
 import com.geektech.quizapp_gt_4_2.core.CoreFragment;
-import com.geektech.quizapp_gt_4_2.quiz.QuizActivity;
+import com.geektech.quizapp_gt_4_2.presentation.quiz.QuizActivity;
 import com.geektech.quizapp_gt_4_2.utils.SimpleSeekBarChangeListener;
 
 import org.angmarch.views.NiceSpinner;
@@ -36,6 +37,25 @@ public class MainFragment extends CoreFragment {
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_main;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        MainViewModel viewModel = ViewModelProviders.of(this)
+                .get(MainViewModel.class);
+
+        viewModel.finishEvent.observe(this, aVoid -> {
+            Log.d("ololo", "Finish");
+        });
+
+        viewModel.messageEvent.observe(this, message -> {
+            Log.d("ololo", "Meessage " + message);
+        });
+
+        viewModel.callFinish();
+        viewModel.onShowMessageClick();
     }
 
     @Override

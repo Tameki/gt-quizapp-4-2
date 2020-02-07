@@ -1,12 +1,15 @@
-package com.geektech.quizapp_gt_4_2.quiz;
+package com.geektech.quizapp_gt_4_2.presentation.quiz;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.geektech.quizapp_gt_4_2.App;
+import com.geektech.quizapp_gt_4_2.core.SingleLiveEvent;
 import com.geektech.quizapp_gt_4_2.data.remote.IQuizApiClient;
 import com.geektech.quizapp_gt_4_2.model.Question;
+import com.geektech.quizapp_gt_4_2.model.QuizResult;
 
+import java.util.Date;
 import java.util.List;
 
 public class QuizViewModel extends ViewModel {
@@ -16,6 +19,10 @@ public class QuizViewModel extends ViewModel {
 
     MutableLiveData<List<Question>> questions = new MutableLiveData<>();
     MutableLiveData<Integer> currentQuestionPosition = new MutableLiveData<>();
+
+    SingleLiveEvent<Integer> openResultEvent = new SingleLiveEvent<>();
+    SingleLiveEvent<Void> finishEvent = new SingleLiveEvent<>();
+
 
     void init(int amount, Integer category, String difficulty) {
         quizApiClient.getQuestions(new IQuizApiClient.QuestionsCallback() {
@@ -31,6 +38,8 @@ public class QuizViewModel extends ViewModel {
 
             }
         });
+
+        finishEvent.call();
     }
 
     private int getCorrectAnswersAmount() {
@@ -39,7 +48,20 @@ public class QuizViewModel extends ViewModel {
     }
 
     void finishQuiz() {
-        //TODO:
+        QuizResult result = new QuizResult(
+                0,
+                "",
+                "",
+                mQuestions,
+                getCorrectAnswersAmount(),
+                new Date()
+        );
+
+        int resultId = App.historyStorage.saveQuizResult(result);
+
+        //TODO: Start Result activity
+        finishEvent.call();
+        openResultEvent.setValue(resultId);
     }
 
     void onBackPressed() {
@@ -57,7 +79,9 @@ public class QuizViewModel extends ViewModel {
         // 20, -1
 
         if (mQuestions.size() > position && position >= 0) {
-            mQuestions.get(position).setSelectedAnswerPosition(selectedAnswerPosition);
+            mQuestions.get(position)
+                    .setSelectedAnswerPosition(selectedAnswerPosition);
+
             questions.setValue(mQuestions);
 
             // 20, 17 -> 18
