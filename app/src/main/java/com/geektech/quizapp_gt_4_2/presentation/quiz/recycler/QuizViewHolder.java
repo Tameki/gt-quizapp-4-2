@@ -19,7 +19,7 @@ public class QuizViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.listener = listener;
 
-//        listener.onAnswerClick(getAdapterPosition(), 0);
+        listener.onAnswerClick(getAdapterPosition(), 0);
     }
 
     void onBind(Question question) {

@@ -2,7 +2,10 @@ package com.geektech.quizapp_gt_4_2;
 
 import android.app.Application;
 
+import androidx.room.Room;
+
 import com.geektech.quizapp_gt_4_2.data.QuizRepository;
+import com.geektech.quizapp_gt_4_2.data.db.QuizDatabase;
 import com.geektech.quizapp_gt_4_2.data.history.HistoryStorage;
 import com.geektech.quizapp_gt_4_2.data.history.IHistoryStorage;
 import com.geektech.quizapp_gt_4_2.data.remote.IQuizApiClient;
@@ -12,18 +15,28 @@ public class App extends Application {
 
     public static IQuizApiClient quizApiClient;
     public static IHistoryStorage historyStorage;
+    public static QuizDatabase quizDatabase;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        quizDatabase = Room.databaseBuilder(
+                this,
+                QuizDatabase.class,
+                "quiz.db"
+        ).fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build();
+
         QuizRepository repository = new QuizRepository(
                 new QuizApiClient(),
-                new HistoryStorage()
+                new HistoryStorage(quizDatabase.historyDao())
         );
 
         quizApiClient = repository;
         historyStorage = repository;
+
     }
 
 }

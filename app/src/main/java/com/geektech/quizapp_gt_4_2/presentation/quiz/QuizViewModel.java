@@ -1,5 +1,7 @@
 package com.geektech.quizapp_gt_4_2.presentation.quiz;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -19,36 +21,30 @@ public class QuizViewModel extends ViewModel {
 
     MutableLiveData<List<Question>> questions = new MutableLiveData<>();
     MutableLiveData<Integer> currentQuestionPosition = new MutableLiveData<>();
+    MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
-    SingleLiveEvent<Integer> openResultEvent = new SingleLiveEvent<>();
     SingleLiveEvent<Void> finishEvent = new SingleLiveEvent<>();
-
-
-    void init(int amount, Integer category, String difficulty) {
-        quizApiClient.getQuestions(new IQuizApiClient.QuestionsCallback() {
-            @Override
-            public void onSuccess(List<Question> result) {
-                mQuestions = result;
-                questions.setValue(mQuestions);
-                currentQuestionPosition.setValue(0);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
-
-        finishEvent.call();
-    }
+    SingleLiveEvent<Integer> openResultEvent = new SingleLiveEvent<>();
 
     private int getCorrectAnswersAmount() {
-        //TODO:
-        return 0;
+        int correctAnswers = 0;
+
+        for (Question question : mQuestions) {
+            Integer selectedAnswerPosition = question.getSelectedAnswerPosition();
+
+            if (selectedAnswerPosition != null &&
+                    selectedAnswerPosition >= 0 &&
+                    question.getAnswers().get(selectedAnswerPosition)
+                            .equals(question.getCorrectAnswer())) {
+                correctAnswers++;
+            }
+        }
+
+        return correctAnswers;
     }
 
-    void finishQuiz() {
-        QuizResult result = new QuizResult(
+    private void finishQuiz() {
+        QuizResult quizResult = new QuizResult(
                 0,
                 "",
                 "",
@@ -57,43 +53,72 @@ public class QuizViewModel extends ViewModel {
                 new Date()
         );
 
-        int resultId = App.historyStorage.saveQuizResult(result);
+        int resultId = App.historyStorage.saveQuizResult(quizResult);
 
-        //TODO: Start Result activity
         finishEvent.call();
         openResultEvent.setValue(resultId);
     }
 
+    private void moveToQuestionOrFinish(int position) {
+        if (position == mQuestions.size()) {
+            finishQuiz();
+        } else {
+            currentQuestionPosition.setValue(position);
+        }
+    }
+
+    void init(Integer amount, Integer categoryId, String difficulty) {
+        currentQuestionPosition.setValue(0);
+        isLoading.setValue(true);
+
+        quizApiClient.getQuestions(new IQuizApiClient.QuestionsCallback() {
+            @Override
+            public void onSuccess(List<Question> result) {
+                isLoading.setValue(false);
+                mQuestions = result;
+                questions.setValue(mQuestions);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                isLoading.setValue(false);
+                Log.d("ololo", "Error " + e.getMessage());
+            }
+        });
+    }
+
+    void onAnswerClick(int questionPosition, int answerPosition) {
+        if (currentQuestionPosition.getValue() == null || mQuestions == null) {
+            return;
+        }
+
+        Question question = mQuestions.get(questionPosition);
+
+        question.setSelectedAnswerPosition(answerPosition);
+
+        mQuestions.set(questionPosition, question);
+
+        questions.setValue(mQuestions);
+
+        moveToQuestionOrFinish(questionPosition + 1);
+    }
+
     void onBackPressed() {
-        //TODO:
+        Integer currentPosition = currentQuestionPosition.getValue();
+        if (currentPosition != null) {
+            if (currentPosition == 0) {
+                finishEvent.call();
+            } else {
+                currentQuestionPosition.setValue(currentPosition - 1);
+            }
+        }
     }
 
     void onSkipClick() {
-        //TODO:
-    }
-
-    void onAnswerClick(int position, int selectedAnswerPosition) {
-        // 20, 19
-        // 20, 20
-        // 20, 21
-        // 20, -1
-
-        if (mQuestions.size() > position && position >= 0) {
-            mQuestions.get(position)
-                    .setSelectedAnswerPosition(selectedAnswerPosition);
-
-            questions.setValue(mQuestions);
-
-            // 20, 17 -> 18
-            // 20, 18 -> 19
-            // 20, 19 -> 20
-            // 20, 20
-
-            if (position + 1 == mQuestions.size()) {
-                //TODO: Finish quiz
-            } else {
-                currentQuestionPosition.setValue(position + 1);
-            }
-        }
+        finishQuiz();
+//        Integer currentPosition = currentQuestionPosition.getValue();
+//        if (currentPosition != null) {
+//            onAnswerClick(currentPosition, -1);
+//        }
     }
 }

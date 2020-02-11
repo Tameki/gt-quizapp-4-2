@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.geektech.quizapp_gt_4_2.data.history.IHistoryStorage;
 import com.geektech.quizapp_gt_4_2.data.remote.IQuizApiClient;
+import com.geektech.quizapp_gt_4_2.model.History;
 import com.geektech.quizapp_gt_4_2.model.Question;
 import com.geektech.quizapp_gt_4_2.model.QuizResult;
 
@@ -67,6 +68,11 @@ public class QuizRepository implements IHistoryStorage, IQuizApiClient {
     @Override
     public LiveData<List<QuizResult>> getAll() {
         return null;
+    }
+
+    @Override
+    public LiveData<List<History>> getAllHistory() {
+        return historyStorage.getAllHistory();
     }
 
     @Override
