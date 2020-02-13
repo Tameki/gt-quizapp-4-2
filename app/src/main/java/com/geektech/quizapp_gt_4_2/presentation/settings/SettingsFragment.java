@@ -6,8 +6,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.geektech.core.CoreFragment;
 import com.geektech.quizapp_gt_4_2.R;
-import com.geektech.quizapp_gt_4_2.core.CoreFragment;
 
 public class SettingsFragment extends CoreFragment {
 

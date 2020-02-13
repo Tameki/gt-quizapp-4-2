@@ -2,7 +2,7 @@ package com.geektech.quizapp_gt_4_2.data.remote;
 
 import android.util.Log;
 
-import com.geektech.quizapp_gt_4_2.core.CoreCallback;
+import com.geektech.core.CoreCallback;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;

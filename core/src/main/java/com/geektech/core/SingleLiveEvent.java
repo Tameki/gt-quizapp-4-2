@@ -1,4 +1,4 @@
-package com.geektech.quizapp_gt_4_2.core;
+package com.geektech.core;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;

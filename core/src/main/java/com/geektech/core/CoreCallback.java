@@ -1,4 +1,4 @@
-package com.geektech.quizapp_gt_4_2.core;
+package com.geektech.core;
 
 import retrofit2.Call;
 import retrofit2.Callback;

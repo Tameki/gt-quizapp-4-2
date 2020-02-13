@@ -1,6 +1,6 @@
 package com.geektech.quizapp_gt_4_2.data.remote;
 
-import com.geektech.quizapp_gt_4_2.core.IBaseCallback;
+import com.geektech.core.IBaseCallback;
 import com.geektech.quizapp_gt_4_2.model.Question;
 
 import java.util.List;

@@ -5,8 +5,8 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.geektech.core.SingleLiveEvent;
 import com.geektech.quizapp_gt_4_2.App;
-import com.geektech.quizapp_gt_4_2.core.SingleLiveEvent;
 import com.geektech.quizapp_gt_4_2.data.remote.IQuizApiClient;
 import com.geektech.quizapp_gt_4_2.model.Question;
 import com.geektech.quizapp_gt_4_2.model.QuizResult;

@@ -2,7 +2,8 @@ package com.geektech.quizapp_gt_4_2.presentation.main;
 
 import androidx.lifecycle.ViewModel;
 
-import com.geektech.quizapp_gt_4_2.core.SingleLiveEvent;
+import com.geektech.core.SingleLiveEvent;
+
 
 public class MainViewModel extends ViewModel {
 

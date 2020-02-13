@@ -47,6 +47,11 @@ public class QuizActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private QuizAdapter adapter;
 
+    @Override
+    public void onBackPressed() {
+        viewModel.onBackPressed();
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

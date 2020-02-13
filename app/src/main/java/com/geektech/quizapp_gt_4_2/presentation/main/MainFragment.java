@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.geektech.core.CoreFragment;
 import com.geektech.quizapp_gt_4_2.R;
-import com.geektech.quizapp_gt_4_2.core.CoreFragment;
 import com.geektech.quizapp_gt_4_2.presentation.quiz.QuizActivity;
 import com.geektech.quizapp_gt_4_2.utils.SimpleSeekBarChangeListener;
 
