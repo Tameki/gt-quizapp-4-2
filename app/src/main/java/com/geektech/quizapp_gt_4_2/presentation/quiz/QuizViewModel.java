@@ -94,11 +94,11 @@ public class QuizViewModel extends ViewModel {
 
         Question question = mQuestions.get(questionPosition);
 
-        question.setSelectedAnswerPosition(answerPosition);
-
-        mQuestions.set(questionPosition, question);
-
-        questions.setValue(mQuestions);
+        if (question.getSelectedAnswerPosition() == null) {
+            question.setSelectedAnswerPosition(answerPosition);
+            mQuestions.set(questionPosition, question);
+            questions.setValue(mQuestions);
+        }
 
         moveToQuestionOrFinish(questionPosition + 1);
     }
